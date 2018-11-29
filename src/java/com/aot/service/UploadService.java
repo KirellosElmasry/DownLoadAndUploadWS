@@ -70,6 +70,7 @@ public class UploadService {
     
     private String pretyPath(String path){
         
-        return path.replaceAll("\\\\", "%5C");
+        path = path.replaceAll("\\\\", "%5C");
+        return path.replaceAll("/", "%2F");
     }
 }

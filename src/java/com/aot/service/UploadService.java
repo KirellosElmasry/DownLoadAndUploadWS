@@ -22,25 +22,35 @@ import javax.ejb.Stateless;
 public class UploadService {
 
     //private static final String SAVE_FOLDER = "aotmedan/medan_Files/tasks/";
-    private static final String SAVE_FOLDER = "upload/";
 
     public UploadService() {
     }
 
     public String uploadFileOnServer(InputStream fileInputString,
             FormDataContentDisposition fileInputDetails) {
-        String location ="";
-        File file = new File(SAVE_FOLDER);
-        //File file = new File("");
+
+        String OS = System.getProperty("os.name").toLowerCase();
+        String root;
+
+        if (OS.contains("win")) {
+            root = "C:\\tmp";
+        } else {
+            root = "/tmp";
+        }
+        
+        String location = "";
+        File file = new File(root);
 
         if (!file.exists()) {
             file.mkdirs();
         }
 
-        String fileLocation = file + "\\" + fileInputDetails.getFileName();
+        String fileLocation = file + File.separator + fileInputDetails.getFileName();
 
         NumberFormat myFormat = NumberFormat.getInstance();
-        myFormat.setGroupingUsed(true);
+
+        myFormat.setGroupingUsed(
+                true);
 
         // Save the file 
         try {
@@ -55,21 +65,22 @@ public class UploadService {
             out.flush();
             out.close();
 
-            location = file.getAbsolutePath()+ "\\" +fileInputDetails.getFileName();
-            
-            System.out.println("************** full Location ==> "+location+"   fileSize==> "+ file_size);
-            
+            location = file.getAbsolutePath() + File.separator + fileInputDetails.getFileName();
+
+            System.out.println("************** full Location ==> " + location + "   fileSize==> " + file_size);
+
         } catch (IOException ex) {
-            System.out.println( "Unable to save file ==> "+ location);
+            System.out.println("Unable to save file ==> " + location);
             ex.printStackTrace();
             return "{\"message\" : \"error\"}";
         }
 
-        return "{\"message\" : \"" + pretyPath(location) + "\"}";
+        return "{\"message\" : \"" + pretyPath(location)
+                + "\"}";
     }
-    
-    private String pretyPath(String path){
-        
+
+    private String pretyPath(String path) {
+
         path = path.replaceAll("\\\\", "%5C");
         return path.replaceAll("/", "%2F");
     }

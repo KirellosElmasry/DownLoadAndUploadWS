@@ -27,15 +27,15 @@ public class UploadService {
     }
 
     public String uploadFileOnServer(InputStream fileInputString,
-            FormDataContentDisposition fileInputDetails) {
+            FormDataContentDisposition fileInputDetails, String path) {
 
         String OS = System.getProperty("os.name").toLowerCase();
         String root;
 
         if (OS.contains("win")) {
-            root = "C:\\tmp";
+            root = "C:\\"+path;
         } else {
-            root = "/tmp";
+            root = "/"+path;
         }
         
         String location = "";
@@ -67,7 +67,7 @@ public class UploadService {
 
             location = file.getAbsolutePath() + File.separator + fileInputDetails.getFileName();
 
-            System.out.println("************** full Location ==> " + location + "   fileSize==> " + file_size);
+            System.out.println("************** full Location ==> " + location + "   fileSize==> " + file_size+"  OS ==> "+OS);
 
         } catch (IOException ex) {
             System.out.println("Unable to save file ==> " + location);

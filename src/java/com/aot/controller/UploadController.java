@@ -34,6 +34,7 @@ public class UploadController {
      *
      * @param fileInputString
      * @param fileInputDetails
+     * @param path
      *
      * @return
      */
@@ -42,11 +43,12 @@ public class UploadController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(
             @FormDataParam("file") InputStream fileInputString,
-            @FormDataParam("file") FormDataContentDisposition fileInputDetails) {        
+            @FormDataParam("file") FormDataContentDisposition fileInputDetails,
+            @FormDataParam("path") String path ) {        
         
         if (fileInputString != null && fileInputDetails != null && fileInputDetails.getFileName() != null) {
 
-            String result = uploadService.uploadFileOnServer(fileInputString, fileInputDetails);
+            String result = uploadService.uploadFileOnServer(fileInputString, fileInputDetails, path);
 
             if (result.equals("{\"message\" : \"error\"}")) {
                 return Response.status(Response.Status.CONFLICT).build();
